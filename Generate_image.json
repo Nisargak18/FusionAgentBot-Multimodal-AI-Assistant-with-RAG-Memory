@@ -1,0 +1,143 @@
+{
+  "name": "Generate_image",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query"
+            },
+            {
+              "name": "chat_id",
+              "type": "number"
+            },
+            {
+              "name": "voice_query"
+            }
+          ]
+        }
+      },
+      "id": "528c7edc-05c1-465c-858a-e1517259e2cf",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        272,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ $json.query }}\n{{ $json.voice_text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        32
+      ],
+      "id": "1ffc15b4-5138-4ed3-8a22-336d8109c1a7",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1Jymeq0mAfixzYhV",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('When Executed by Another Workflow').item.json.chat_id }}\n\n\n\n",
+        "binaryData": true,
+        "binaryPropertyName": "image",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        32
+      ],
+      "id": "58ba85bb-5bbb-40bc-a810-a4b9f9a1f9d8",
+      "name": "Send a photo message",
+      "webhookId": "712199fa-9d93-4588-9e0d-fb270d6a45bb",
+      "credentials": {
+        "telegramApi": {
+          "id": "ocA1wyT9FGUznWeE",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nreturn inputItems.map(item => {\n  if (item.binary && item.binary.data) {\n    return {\n      json: {\n        imageGenerated: true,\n        prompt: item.json.prompt || item.json.query || item.json.voice_text || 'Generated image',\n        hasBinary: true\n      },\n      binary: {\n        image: item.binary.data   // 👈 rename from data → image\n      }\n    };\n  } else {\n    return {\n      json: {\n        imageGenerated: false,\n        prompt: item.json.query || item.json.voice_text || item.json.image_prompt || 'No prompt',\n        error: 'No binary from Generate Image'\n      }\n    };\n  }\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        32
+      ],
+      "id": "87fd6282-00a3-4c1f-94f6-0d9a0c167975",
+      "name": "send image"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "send image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send image": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "feee61ea-a83a-4002-a2f6-8e4e53e920f5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2d3a172ce468029fb12e7739de147413fa950607f60305fc4e642f6c3a9d6dcd"
+  },
+  "id": "9I16ZEGbqsoT8-cPSxHTD",
+  "tags": []
+}
