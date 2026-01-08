@@ -58,3 +58,20 @@ n8n Configuration:Import FusionAgent_Workflow.json.Connect your Groq, Gemini and
 Database Setup:Run the provided SQL script in your Supabase SQL Editor to initialize the documents table with vector support.Environment 
 
 Variables:GROQ_API_KEY,SUPABASE_URL,TELEGRAM_BOT_TOKEN,GEMINI_API_KEY
+
+
+## Outputs
+
+1. Demo video
+https://github.com/user-attachments/assets/822981fd-9be6-4b17-a533-cf23870efbf0
+
+2. Main Workflow
+<img width="1624" height="599" alt="Mainworkflow" src="https://github.com/user-attachments/assets/fb3f4a2c-2bae-46f3-9108-e47e3ccff185" />
+
+3. Sub Workflow (generate image)
+<img width="1292" height="471" alt="SubWorkflow(generate image)" src="https://github.com/user-attachments/assets/fb72852e-1747-4564-84f5-114ebc88467e" />
+
+
+
+
+
