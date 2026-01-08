@@ -417,7 +417,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:batchEmbedContents?key=AIzaSyAuRnXq31olx95TF6PpF6m1IEuxyBSxhN8",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:batchEmbedContents?key= ",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
